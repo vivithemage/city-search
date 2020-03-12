@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace City_Search
+﻿namespace City_Search
 {
     class Program
     {
