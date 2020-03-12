@@ -5,7 +5,7 @@ namespace City_Search
     class Program
     {
         // Alphabet size (26) and increased by two to include spaces and dashes.
-        static readonly int ALPHABET_SIZE = 26;
+        static readonly int ALPHABET_SIZE = 28;
 
         // trie node 
         class TrieNode
@@ -40,7 +40,7 @@ namespace City_Search
             for (level = 0; level < length; level++)
             {
                 // numerical index of alphabet?
-                index = key[level] - 'a';
+                index = getIndex(key, level);
                 if (pCrawl.children[index] == null)
                     pCrawl.children[index] = new TrieNode();
 
@@ -49,6 +49,27 @@ namespace City_Search
 
             // mark last node as leaf 
             pCrawl.isEndOfWord = true;
+        }
+
+        // Needed to handle extra characters
+        static int getIndex(String key, int level)
+        {
+            int index;
+
+            switch (key[level])
+            {
+                case ' ':
+                    index = 26;
+                    break;
+                case '-':
+                    index = 27;
+                    break;
+                default:
+                    index = key[level] - 'a';
+                    break;
+            }
+            
+            return index;
         }
 
         // Returns true if key  
@@ -62,7 +83,7 @@ namespace City_Search
 
             for (level = 0; level < length; level++)
             {
-                index = key[level] - 'a';
+                index = getIndex(key, level);
 
                 if (pCrawl.children[index] == null)
                     return false;
@@ -75,7 +96,7 @@ namespace City_Search
 
         static void Main(string[] args)
         {            
-            String[] keys = {"the", "a", "there", "answer",
+            String[] keys = {"the ", "a", "there", "answer",
                         "any", "by", "bye", "their", "testing"};
             String[] output = { "Not present in trie", "Present in trie" };
 
@@ -87,10 +108,12 @@ namespace City_Search
             for (i = 0; i < keys.Length; i++)
                 insert(keys[i]);
 
-            // Search for different keys 
-            if (search("testing") == true)
-                Console.WriteLine("testing --- " + output[1]);
-            else Console.WriteLine("testing --- " + output[0]);
+            // Search for different keys
+            String searchterm = "the ";
+
+            if (search(searchterm) == true)
+                Console.WriteLine(searchterm + " --- " + output[1]);
+            else Console.WriteLine(searchterm + " --- " + output[0]);
 
         }
     }
