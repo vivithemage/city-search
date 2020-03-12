@@ -94,12 +94,29 @@ namespace City_Search
             return (pCrawl != null && pCrawl.isEndOfWord);
         }
 
-        static void Main(string[] args)
-        {            
-            String[] keys = {"the ", "a", "there", "answer",
-                        "any", "by", "bye", "their", "testing"};
-            String[] output = { "Not present in trie", "Present in trie" };
+        static void consoleInputHandler()
+        {
+             while (true) // Loop indefinitely
+            {
+                Console.WriteLine("Axa City Search (type exit to quit):"); // Prompt
+                string searchterm = Console.ReadLine(); // Get string from user
+                
+                if (searchterm == "exit") // Check string
+                {
+                    break;
+                }
+                
+                if (search(searchterm) == true)
+                    Console.WriteLine(searchterm + " --- present in trie");
+                else Console.WriteLine(searchterm + " --- Not Present in trie");
+            }
 
+        }
+
+        static void buildTrie()
+        {
+            String[] keys = {"york", "leeds", "manchester", "london",
+                        "hull", "fort william", "liverpool", "belfast", "dublin"};
 
             root = new TrieNode();
 
@@ -107,14 +124,12 @@ namespace City_Search
             int i;
             for (i = 0; i < keys.Length; i++)
                 insert(keys[i]);
+        }
 
-            // Search for different keys
-            String searchterm = "the ";
-
-            if (search(searchterm) == true)
-                Console.WriteLine(searchterm + " --- " + output[1]);
-            else Console.WriteLine(searchterm + " --- " + output[0]);
-
+        static void Main(string[] args)
+        {
+            buildTrie();
+            consoleInputHandler();
         }
     }
 }
