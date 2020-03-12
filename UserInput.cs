@@ -5,29 +5,35 @@ namespace City_Search
 {
     class UserInput
     {
+        private String sanitizeInput(String input)
+        {
+            return input.ToLower();
+        }
+
         public void readLoop(Trie trie)
         {
             string result;
             string searchterm;
-            
+            String sanitizedSearchTerm;
+
             Console.WriteLine("Axa City Search (type exit to quit):"); // Prompt
 
             while (true)
             {                
-                searchterm = Console.ReadLine(); // Get string from user               
+                searchterm = Console.ReadLine(); 
+                sanitizedSearchTerm = sanitizeInput(searchterm);
 
-                if (searchterm == "exit") // Check string
+                if (sanitizedSearchTerm == "exit")
                 {
                     break;
-                }
-
-                if (trie.search(searchterm) == true)
+                } 
+                else if (trie.search(sanitizedSearchTerm) == true)
                 {
-                    result = searchterm + " --- present in trie");
+                    result = sanitizedSearchTerm + " --- present in trie";
                 }
                 else
                 {
-                    result = searchterm + " --- Not Present in trie");
+                    result = sanitizedSearchTerm + " --- Not Present in trie";
                 }
 
                 Console.WriteLine(result);

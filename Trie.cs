@@ -95,7 +95,7 @@ namespace City_Search
             return (pCrawl != null && pCrawl.isEndOfWord);
         }
 
-        static void buildTrie()
+        public void build()
         {
             //TODO read from text file
             String[] keys = {"york", "leeds", "manchester", "london",
