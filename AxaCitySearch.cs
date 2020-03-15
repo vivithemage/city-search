@@ -1,19 +1,15 @@
 ﻿namespace City_Search
 {
-    class Program
+    class AxaCitySearch
     {
         static void Main(string[] args)
         {
             Trie trie = new Trie();
 
-            trie.build();
+            trie.Build();
             UserInput userInput = new UserInput();
 
-
             userInput.readLoop(trie);
-
-            //trie.buildTrie();
-            
         }
     }
 }
