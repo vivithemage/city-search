@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 
 namespace City_Search
 {
@@ -27,6 +27,26 @@ namespace City_Search
 
         static TrieNode root;
 
+
+        static bool isValid(String key)
+        {
+            int level;
+            int length = key.Length;
+            int index;
+
+            for (level = 0; level < length; level++)
+            {
+                index = getIndex(key, level);
+                
+                if ((index > 28) || (index < 0))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         // If not present, inserts key into trie 
         // If the key is prefix of trie node,  
         // just marks leaf node 
@@ -42,10 +62,13 @@ namespace City_Search
             {
                 // numerical index of alphabet?
                 index = getIndex(key, level);
-                if (pCrawl.children[index] == null)
-                    pCrawl.children[index] = new TrieNode();
 
-                pCrawl = pCrawl.children[index];
+                if (pCrawl.children[index] == null)
+                {
+                    pCrawl.children[index] = new TrieNode();
+                }
+
+                pCrawl = pCrawl.children[index];                
             }
 
             // mark last node as leaf 
@@ -86,8 +109,10 @@ namespace City_Search
             {
                 index = getIndex(key, level);
 
-                if (pCrawl.children[index] == null)
+               if (pCrawl.children[index] == null)
+                {
                     return false;
+                }                    
 
                 pCrawl = pCrawl.children[index];
             }
@@ -95,18 +120,30 @@ namespace City_Search
             return (pCrawl != null && pCrawl.isEndOfWord);
         }
 
-        public void build()
+        /* 
+         * Builds trie structure with world cities.
+         * Uses the following as the city data source:
+         * https://github.com/dr5hn/countries-states-cities-database/blob/master/cities.json
+         */
+        public void Build()
         {
-            //TODO read from text file
-            String[] keys = {"york", "leeds", "manchester", "london",
-                        "hull", "fort william", "liverpool", "belfast", "dublin"};
+            List<Cities.City> citiesGroup = Cities.Get();
 
             root = new TrieNode();
 
-            // Construct trie 
-            int i;
-            for (i = 0; i < keys.Length; i++)
-                insert(keys[i]);
+            foreach (Cities.City singleCity in citiesGroup)
+            {
+                if (isValid(singleCity.Name.ToLower()))
+                {
+                    insert(singleCity.Name.ToLower());
+                }
+                else
+                {
+                    Console.WriteLine("Unable to add {0} as it contains a character that " +
+                        "is not in the 26 letter alphabet and is not a space or a dash",
+                        singleCity.Name.ToLower());
+                }
+            }            
         }
     }
 }
