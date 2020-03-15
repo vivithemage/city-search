@@ -28,7 +28,7 @@ namespace City_Search
         static TrieNode root;
 
 
-        static bool isValid(String key)
+        static bool IsValid(String key)
         {
             int level;
             int length = key.Length;
@@ -36,7 +36,7 @@ namespace City_Search
 
             for (level = 0; level < length; level++)
             {
-                index = getIndex(key, level);
+                index = GetIndex(key, level);
                 
                 if ((index > 28) || (index < 0))
                 {
@@ -50,7 +50,7 @@ namespace City_Search
         // If not present, inserts key into trie 
         // If the key is prefix of trie node,  
         // just marks leaf node 
-        static void insert(String key)
+        static void Insert(String key)
         {
             int level;
             int length = key.Length;
@@ -61,7 +61,7 @@ namespace City_Search
             for (level = 0; level < length; level++)
             {
                 // numerical index of alphabet?
-                index = getIndex(key, level);
+                index = GetIndex(key, level);
 
                 if (pCrawl.children[index] == null)
                 {
@@ -76,7 +76,7 @@ namespace City_Search
         }
 
         // Needed to handle extra characters
-        static int getIndex(String key, int level)
+        static int GetIndex(String key, int level)
         {
             int index;
 
@@ -98,7 +98,7 @@ namespace City_Search
 
         // Returns true if key  
         // presents in trie, else false 
-        public bool search(String key)
+        public bool Search(String key)
         {
             int level;
             int length = key.Length;
@@ -107,7 +107,7 @@ namespace City_Search
 
             for (level = 0; level < length; level++)
             {
-                index = getIndex(key, level);
+                index = GetIndex(key, level);
 
                if (pCrawl.children[index] == null)
                 {
@@ -133,9 +133,9 @@ namespace City_Search
 
             foreach (Cities.City singleCity in citiesGroup)
             {
-                if (isValid(singleCity.Name.ToLower()))
+                if (IsValid(singleCity.Name.ToLower()))
                 {
-                    insert(singleCity.Name.ToLower());
+                    Insert(singleCity.Name.ToLower());
                 }
                 else
                 {

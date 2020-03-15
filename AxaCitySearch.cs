@@ -9,7 +9,7 @@
             trie.Build();
             UserInput userInput = new UserInput();
 
-            userInput.readLoop(trie);
+            userInput.ReadLoop(trie);
         }
     }
 }
