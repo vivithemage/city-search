@@ -75,6 +75,27 @@ namespace City_Search
             pCrawl.isEndOfWord = true;
         }
 
+        static char GetCharacterFromIndex(int index)
+        {
+            char character;
+            int unicodeStartingPosition = 65;
+
+            switch (index)
+            {
+                case 26:
+                    character = ' ';
+                    break;
+                case 27:
+                    character = '-';
+                    break;
+                default:
+                    character = (char)(unicodeStartingPosition + index);
+                    break;
+            }            
+
+            return character;
+        }
+
         // Needed to handle extra characters
         static int GetIndex(String key, int level)
         {
@@ -96,8 +117,35 @@ namespace City_Search
             return index;
         }
 
-        // Returns true if key  
-        // presents in trie, else false 
+        /* Returns next three cities */
+        private static void AutocompleteCities()
+        {
+            
+        }
+
+        /* 
+         * Returns next three characters. Requires length to determine
+         * which child to start with.
+         */
+        private static void AutocompleteCharacters(TrieNode pCrawl, int length)
+        {
+            for (int level = 0; level < 28; level++)
+            {
+                if (pCrawl.children[level] != null)
+                {
+                    Console.WriteLine("Character available: {0}", GetCharacterFromIndex(level));
+                }
+            }
+        }
+
+        static bool FoundCity(TrieNode pCrawl)
+        {
+            return (pCrawl != null && pCrawl.isEndOfWord);
+        }
+        
+        /*
+         * Returns true if the city is found
+         */
         public bool Search(String key)
         {
             int level;
@@ -117,7 +165,22 @@ namespace City_Search
                 pCrawl = pCrawl.children[index];
             }
 
-            return (pCrawl != null && pCrawl.isEndOfWord);
+            GetCharacterFromIndex(1);
+
+            // TODO convert to use ICityResult
+            if (FoundCity(pCrawl))
+            {
+                return true;
+            }
+
+            /* 
+             * Have not been able to find a city so return the next
+             * three characters and cities
+             */
+            AutocompleteCharacters(pCrawl, length);
+
+
+            return false;
         }
 
         /* 
@@ -131,6 +194,7 @@ namespace City_Search
 
             root = new TrieNode();
 
+            Console.WriteLine("Loading, please wait...");
             foreach (Cities.City singleCity in citiesGroup)
             {
                 if (IsValid(singleCity.Name.ToLower()))
@@ -139,9 +203,9 @@ namespace City_Search
                 }
                 else
                 {
-                    Console.WriteLine("Unable to add {0} as it contains a character that " +
+                    /*Console.WriteLine("Unable to add {0} as it contains a character that " +
                         "is not in the 26 letter alphabet and is not a space or a dash",
-                        singleCity.Name.ToLower());
+                        singleCity.Name.ToLower());*/
                 }
             }            
         }
