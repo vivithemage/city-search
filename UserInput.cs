@@ -24,13 +24,18 @@ namespace City_Search
             return message;
         }
 
+        private void displayWelcomeMessage()
+        {
+            Console.WriteLine("Axa City Search (type exit to quit):");
+        }
+
         public void ReadLoop(Trie trie)
         {
             string message;
             string searchterm;
             string sanitizedSearchTerm;
 
-            Console.WriteLine("Axa City Search (type exit to quit):"); // Prompt
+            displayWelcomeMessage();
 
             while (true)
             {                
