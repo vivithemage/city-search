@@ -10,9 +10,23 @@ namespace City_Search
             return input.ToLower();
         }
 
+        private string AvailableNextCharactersMessage(ICityResult result)
+        {
+            string message = "The following characters are available: ";
+
+            return message;
+        }
+
+        private string AvailableNextCitiesMessage(ICityResult result)
+        {
+            string message = "The following cities are available: ";
+
+            return message;
+        }
+
         public void ReadLoop(Trie trie)
         {
-            string result;
+            string message;
             string searchterm;
             string sanitizedSearchTerm;
 
@@ -23,20 +37,22 @@ namespace City_Search
                 searchterm = Console.ReadLine(); 
                 sanitizedSearchTerm = SanitizeInput(searchterm);
 
+                ICityResult result = trie.Search(sanitizedSearchTerm);
+
                 if (sanitizedSearchTerm == "exit")
                 {
                     break;
-                } 
-                else if (trie.Search(sanitizedSearchTerm) == true)
+                }
+                else if (result.NextLetters.Count.Equals(0))
                 {
-                    result = sanitizedSearchTerm + " --- present in trie";
+                    message = sanitizedSearchTerm + " is a city";
                 }
                 else
                 {
-                    result = sanitizedSearchTerm + " --- Not Present in trie";
+                    message = AvailableNextCitiesMessage(result) + AvailableNextCitiesMessage(result);                    
                 }
 
-                Console.WriteLine(result);
+                Console.WriteLine(message);
             }
         }
     }
