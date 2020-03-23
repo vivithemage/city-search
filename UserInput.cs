@@ -48,13 +48,17 @@ namespace City_Search
                 {
                     break;
                 }
-                else if (result.NextLetters.Count.Equals(0))
+                else if (result.CityFound)                   
                 {
                     message = sanitizedSearchTerm + " is a city";
+                } 
+                else if (result.NextLetters.Count.Equals(0) && result.NextCities.Count.Equals(0))
+                {
+                    message = "Input does not bear resemblance to anything. Unable to suggest next characters or cities";
                 }
                 else
                 {
-                    message = AvailableNextCitiesMessage(result) + AvailableNextCitiesMessage(result);                    
+                    message = AvailableNextCitiesMessage(result) + AvailableNextCharactersMessage(result);                    
                 }
 
                 Console.WriteLine(message);

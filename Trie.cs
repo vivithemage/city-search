@@ -154,7 +154,9 @@ namespace City_Search
         }
         
         /*
-         * Returns true if the city is found
+         * Returns an empty CityResult object if a city is found,
+         * if not, potential next letters and cities are returned if a partial
+         * match is found.
          */
         public ICityResult Search(String key)
         {
@@ -177,9 +179,12 @@ namespace City_Search
                 pCrawl = pCrawl.children[index];
             }
 
-            // TODO convert to use ICityResult
+            /*
+             * If there is an exact match, the object lists will remain empty and the CityFound flag will be set to true.                          
+             */
             if (ExactMatch(pCrawl))
             {
+                result.CityFound = true;
                 return result;
             }
 
@@ -205,6 +210,7 @@ namespace City_Search
             root = new TrieNode();
 
             Console.WriteLine("Loading, please wait...");
+
             foreach (Cities.City singleCity in citiesGroup)
             {
                 if (IsValid(singleCity.Name.ToLower()))

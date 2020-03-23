@@ -6,12 +6,14 @@ namespace City_Search
     {
         ICollection<string> NextLetters { get; set; }
         ICollection<string> NextCities { get; set; }
+        bool CityFound { get; set; }
     }
 
     public class CityResult : ICityResult
     {
         private ICollection<string> nextCharacters = new List<string>();
         private ICollection<string> nextCities = new List<string>();
+        private bool cityFound = false;
 
         public ICollection<string> NextLetters
         {
@@ -36,6 +38,18 @@ namespace City_Search
             set
             {
                 nextCities = value;
+            }
+        }
+
+        public bool CityFound
+        {
+            get
+            {
+                return cityFound;
+            }
+            set
+            {
+                cityFound = value;
             }
         }
     }
