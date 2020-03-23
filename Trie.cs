@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace City_Search
 {
-    class Trie
+    class Trie : ICityFinder
     {
         // Alphabet size (26) and increased by two to include spaces and dashes.
         static readonly int ALPHABET_SIZE = 28;
@@ -91,7 +91,7 @@ namespace City_Search
                 default:
                     character = (char)(unicodeStartingPosition + index);
                     break;
-            }            
+            }
 
             return character;
         }
@@ -118,27 +118,37 @@ namespace City_Search
         }
 
         /* Returns next three cities */
-        private static void AutocompleteCities()
+        private static ICollection<string> AutocompleteCities(TrieNode pCrawl, int length)
         {
-            
+            ICollection<string> nextCities = new List<string>();
+
+            return nextCities;
         }
 
         /* 
          * Returns next three characters. Requires length to determine
          * which child to start with.
          */
-        private static void AutocompleteCharacters(TrieNode pCrawl, int length)
+        private static ICollection<string> AutocompleteCharacters(TrieNode pCrawl, int length)
         {
+            ICollection<string> nextCharacters = new List<string>();
+
+            char currentNextCharacter;
+
             for (int level = 0; level < 28; level++)
             {
                 if (pCrawl.children[level] != null)
                 {
-                    Console.WriteLine("Character available: {0}", GetCharacterFromIndex(level));
+                    //Console.WriteLine("Character available: {0}", GetCharacterFromIndex(level));
+                    currentNextCharacter = GetCharacterFromIndex(level);
+                    nextCharacters.Add(currentNextCharacter.ToString());
                 }
             }
+
+            return nextCharacters;
         }
 
-        static bool FoundCity(TrieNode pCrawl)
+        static bool ExactMatch(TrieNode pCrawl)
         {
             return (pCrawl != null && pCrawl.isEndOfWord);
         }
@@ -146,12 +156,14 @@ namespace City_Search
         /*
          * Returns true if the city is found
          */
-        public bool Search(String key)
+        public ICityResult Search(String key)
         {
             int level;
             int length = key.Length;
             int index;
             TrieNode pCrawl = root;
+
+            CityResult result = new CityResult();            
 
             for (level = 0; level < length; level++)
             {
@@ -159,28 +171,26 @@ namespace City_Search
 
                if (pCrawl.children[index] == null)
                 {
-                    return false;
+                    return result;
                 }                    
 
                 pCrawl = pCrawl.children[index];
             }
 
-            GetCharacterFromIndex(1);
-
             // TODO convert to use ICityResult
-            if (FoundCity(pCrawl))
+            if (ExactMatch(pCrawl))
             {
-                return true;
+                return result;
             }
 
             /* 
              * Have not been able to find a city so return the next
              * three characters and cities
              */
-            AutocompleteCharacters(pCrawl, length);
+            result.NextLetters = AutocompleteCharacters(pCrawl, length);
+            result.NextCities = AutocompleteCities(pCrawl, length);
 
-
-            return false;
+            return result;
         }
 
         /* 
