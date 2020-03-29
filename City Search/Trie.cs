@@ -117,7 +117,18 @@ namespace City_Search
             return index;
         }
 
-        /* Returns next three cities */
+        /* 
+         * Returns all next potential cities
+         * Use depth-first traversal - Preorder (Root, Left, Right).
+         * 
+         * TODO: Allow for each of the letters in each note to be set as 'visited'
+         * 
+         * Plan.
+         * Create a string
+         * Traverse the tree and as each letter is passed, mark it as visited and append it to the string.
+         * If the node is an end of word node, stop the traverse, log the string as a city and start the traversal again.
+         * All traversals will ignore any visted nodes and by using the preorder method of traversal the city names should be yielded.
+         */
         private static ICollection<string> AutocompleteCities(TrieNode pCrawl, int length)
         {
             ICollection<string> nextCities = new List<string>();
@@ -139,7 +150,6 @@ namespace City_Search
             {
                 if (pCrawl.children[level] != null)
                 {
-                    //Console.WriteLine("Character available: {0}", GetCharacterFromIndex(level));
                     currentNextCharacter = GetCharacterFromIndex(level);
                     nextCharacters.Add(currentNextCharacter.ToString());
                 }
