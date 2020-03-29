@@ -5,10 +5,9 @@
         static void Main(string[] args)
         {
             Trie trie = new Trie();
-
             trie.Build();
-            UserInput userInput = new UserInput();
 
+            UserInput userInput = new UserInput();
             userInput.ReadLoop(trie);
         }
     }

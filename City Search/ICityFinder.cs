@@ -4,7 +4,7 @@ using System.Text;
 
 namespace City_Search
 {
-    interface ICityFinder
+    public interface ICityFinder
     {
         ICityResult Search(string searchString);
     }
