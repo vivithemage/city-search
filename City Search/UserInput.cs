@@ -12,16 +12,22 @@ namespace City_Search
 
         private string AvailableNextCharactersMessage(ICityResult result)
         {
-            string message = "The following characters are available: ";
+            string message = "The following next characters are available: ";
+
+            foreach (string letter in result.NextLetters)
+            {
+                message = $"{message} {letter},";
+            }
+
+            message = message.TrimEnd(',');
 
             return message;
         }
 
         private string AvailableNextCitiesMessage(ICityResult result)
         {
-            string message = "The following cities are available: ";
 
-            return message;
+            return "test";
         }
 
         private void displayWelcomeMessage()
@@ -58,7 +64,7 @@ namespace City_Search
                 }
                 else
                 {
-                    message = AvailableNextCitiesMessage(result) + AvailableNextCharactersMessage(result);                    
+                    message = AvailableNextCitiesMessage(result) + "\n" + AvailableNextCharactersMessage(result);                    
                 }
 
                 Console.WriteLine(message);
