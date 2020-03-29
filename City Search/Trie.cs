@@ -128,6 +128,7 @@ namespace City_Search
          * Traverse the tree and as each letter is passed, mark it as visited and append it to the string.
          * If the node is an end of word node, stop the traverse, log the string as a city and start the traversal again.
          * All traversals will ignore any visted nodes and by using the preorder method of traversal the city names should be yielded.
+         * After everything has been traversed in the tree, reset all the visited flags to 'not visited' ready for another search.
          */
         private static ICollection<string> AutocompleteCities(TrieNode pCrawl, int length)
         {
