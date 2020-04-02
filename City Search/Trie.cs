@@ -16,10 +16,12 @@ namespace City_Search
             // isEndOfWord is true if the node represents 
             // end of a word 
             public bool isEndOfWord;
+            public bool visited;
 
             public TrieNode()
             {
                 isEndOfWord = false;
+                visited = false;
                 for (int i = 0; i < ALPHABET_SIZE; i++)
                     children[i] = null;
             }
@@ -117,6 +119,33 @@ namespace City_Search
             return index;
         }
 
+        /*
+         * Pass cities by reference so no need to return.
+         * Ran recursively to build the array
+         */
+        private static void DFKPreorder(ref ICollection<string> nextCities, TrieNode pCrawl)
+        {
+            string singleCity = "";
+
+            for (int level = 0; level < 28; level++)
+            {
+                if (pCrawl.children[level] != null)
+                {
+                    if (pCrawl.children[level].visited != true)
+                    {
+                        pCrawl.children[level].visited = true;
+                        Console.WriteLine(GetCharacterFromIndex(level));
+                        pCrawl = pCrawl.children[level];
+                        DFKPreorder(ref nextCities, pCrawl);
+                    }
+                    else if (pCrawl.children[level].isEndOfWord == true)
+                    {
+                        //nextCities
+                    }
+                }
+            }
+        }
+
         /* 
          * Returns all next potential cities
          * Use depth-first traversal - Preorder (Root, Left, Right).
@@ -133,6 +162,8 @@ namespace City_Search
         private static ICollection<string> AutocompleteCities(TrieNode pCrawl, int length)
         {
             ICollection<string> nextCities = new List<string>();
+
+            DFKPreorder(ref nextCities, pCrawl);
 
             return nextCities;
         }
