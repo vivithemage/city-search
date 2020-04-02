@@ -121,12 +121,10 @@ namespace City_Search
 
         /*
          * Pass cities by reference so no need to return.
-         * Ran recursively to build the array
+         * Run DFS recursively to build the array
          */
-        private static void DFKPreorder(ref ICollection<string> nextCities, TrieNode pCrawl)
+        private static void DFSPreorder(ref string currentCity, ref ICollection<string> nextCities, TrieNode pCrawl, TrieNode pRoot)
         {
-            string singleCity = "";
-
             for (int level = 0; level < 28; level++)
             {
                 if (pCrawl.children[level] != null)
@@ -134,13 +132,26 @@ namespace City_Search
                     if (pCrawl.children[level].visited != true)
                     {
                         pCrawl.children[level].visited = true;
-                        Console.WriteLine(GetCharacterFromIndex(level));
+                        currentCity = currentCity + GetCharacterFromIndex(level);
+                        if (!GetCharacterFromIndex(level).Equals(""))
+                        {
+                            Console.WriteLine(GetCharacterFromIndex(level));
+                        }
                         pCrawl = pCrawl.children[level];
-                        DFKPreorder(ref nextCities, pCrawl);
+                        DFSPreorder(ref currentCity, ref nextCities, pCrawl, pRoot);
                     }
                     else if (pCrawl.children[level].isEndOfWord == true)
-                    {
-                        //nextCities
+                    {   
+                        pCrawl = pRoot;
+                        
+                        if (currentCity != "")
+                        {
+                            Console.WriteLine(currentCity);
+                            nextCities.Add(currentCity);
+                            currentCity = "";
+                        }
+                        
+                        DFSPreorder(ref currentCity, ref nextCities, pCrawl, pRoot);
                     }
                 }
             }
@@ -162,8 +173,9 @@ namespace City_Search
         private static ICollection<string> AutocompleteCities(TrieNode pCrawl, int length)
         {
             ICollection<string> nextCities = new List<string>();
+            string currentCity = "";
 
-            DFKPreorder(ref nextCities, pCrawl);
+            DFSPreorder(ref currentCity, ref nextCities, pCrawl, pCrawl);
 
             return nextCities;
         }
