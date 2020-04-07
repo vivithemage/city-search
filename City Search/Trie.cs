@@ -119,40 +119,50 @@ namespace City_Search
             return index;
         }
 
+        private static bool IsLastNode(TrieNode pCrawl)
+        {
+            for (int level = 0; level < 28; level++)
+            {
+                if (pCrawl.children[level] != null)
+                {
+                    return false;
+                } 
+            }
+
+            return true;
+        }
+
         /*
          * Pass cities by reference so no need to return.
          * Run DFS recursively to build the array
          */
         private static void DFSPreorder(ref string currentCity, ref ICollection<string> nextCities, TrieNode pCrawl, TrieNode pRoot)
         {
+            pCrawl.visited = true;
+
             for (int level = 0; level < 28; level++)
             {
                 if (pCrawl.children[level] != null)
                 {
-                    if (pCrawl.children[level].visited != true)
+                    currentCity = currentCity + GetCharacterFromIndex(level);
+
+                    if (pCrawl.children[level].isEndOfWord)
                     {
-                        pCrawl.children[level].visited = true;
-                        currentCity = currentCity + GetCharacterFromIndex(level);
-                        if (!GetCharacterFromIndex(level).Equals(""))
+                        //pCrawl.children[level].visited = true;
+                        Console.WriteLine(currentCity);
+
+
+                        // If all next stages are null, clear city
+                        //TODO - this is flawed. It's clearing a current city when there could be others that build on it
+                        if (IsLastNode(pCrawl.children[level]) && pCrawl.children[level].visited != true)
                         {
-                            Console.WriteLine(GetCharacterFromIndex(level));
-                        }
-                        pCrawl = pCrawl.children[level];
-                        DFSPreorder(ref currentCity, ref nextCities, pCrawl, pRoot);
-                    }
-                    else if (pCrawl.children[level].isEndOfWord == true)
-                    {   
-                        pCrawl = pRoot;
-                        
-                        if (currentCity != "")
-                        {
-                            Console.WriteLine(currentCity);
-                            nextCities.Add(currentCity);
                             currentCity = "";
+                            //DFSPreorder(ref currentCity, ref nextCities, pRoot, pRoot);                            
                         }
-                        
-                        DFSPreorder(ref currentCity, ref nextCities, pCrawl, pRoot);
+
                     }
+
+                    DFSPreorder(ref currentCity, ref nextCities, pCrawl.children[level], pRoot);
                 }
             }
         }
