@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace City_Search
+namespace CitySearch
 {
     class UserInput
     {

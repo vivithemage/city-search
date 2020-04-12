@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace City_Search
+namespace CitySearch
 {
     public interface ICityResult
     {

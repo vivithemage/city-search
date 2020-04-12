@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace City_Search
+namespace CitySearch
 {
-    class Trie : ICityFinder
+    public class Trie : ICityFinder
     {
         // Alphabet size (26) and increased by two to include spaces and dashes.
         static readonly int ALPHABET_SIZE = 28;
@@ -80,7 +80,7 @@ namespace City_Search
         static char GetCharacterFromIndex(int index)
         {
             char character;
-            int unicodeStartingPosition = 65;
+            int unicodeStartingPosition = 97;
 
             switch (index)
             {
@@ -136,7 +136,7 @@ namespace City_Search
          * Pass cities by reference so no need to return.
          * Run DFS recursively to build the array
          */
-        private static void DFSPreorder(ref string currentCity, ref ICollection<string> nextCities, TrieNode pCrawl, TrieNode pRoot)
+        private static void DFSPreorder(ref string currentCity, ref ICollection<string> nextCities, TrieNode pCrawl, TrieNode pRoot,string key)
         {
             pCrawl.visited = true;
 
@@ -149,7 +149,7 @@ namespace City_Search
                     if (pCrawl.children[level].isEndOfWord)
                     {
                         //pCrawl.children[level].visited = true;
-                        Console.WriteLine(currentCity);
+                        Console.WriteLine(System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(key) + currentCity);
 
 
                         // If all next stages are null, clear city
@@ -162,7 +162,7 @@ namespace City_Search
 
                     }
 
-                    DFSPreorder(ref currentCity, ref nextCities, pCrawl.children[level], pRoot);
+                    DFSPreorder(ref currentCity, ref nextCities, pCrawl.children[level], pRoot,key);
                 }
             }
         }
@@ -180,12 +180,12 @@ namespace City_Search
          * All traversals will ignore any visted nodes and by using the preorder method of traversal the city names should be yielded.
          * After everything has been traversed in the tree, reset all the visited flags to 'not visited' ready for another search.
          */
-        private static ICollection<string> AutocompleteCities(TrieNode pCrawl, int length)
+        private static ICollection<string> AutocompleteCities(TrieNode pCrawl, int length,string key)
         {
             ICollection<string> nextCities = new List<string>();
             string currentCity = "";
 
-            DFSPreorder(ref currentCity, ref nextCities, pCrawl, pCrawl);
+            DFSPreorder(ref currentCity, ref nextCities, pCrawl, pCrawl,key);
 
             return nextCities;
         }
@@ -229,16 +229,16 @@ namespace City_Search
             int index;
             TrieNode pCrawl = root;
 
-            CityResult result = new CityResult();            
+            CityResult result = new CityResult();
 
             for (level = 0; level < length; level++)
             {
                 index = GetIndex(key, level);
 
-               if (pCrawl.children[index] == null)
+                if (pCrawl.children[index] == null)
                 {
                     return result;
-                }                    
+                }
 
                 pCrawl = pCrawl.children[index];
             }
@@ -257,7 +257,7 @@ namespace City_Search
              * three characters and cities
              */
             result.NextLetters = AutocompleteCharacters(pCrawl, length);
-            result.NextCities = AutocompleteCities(pCrawl, length);
+            result.NextCities = AutocompleteCities(pCrawl, length,key);
 
             return result;
         }

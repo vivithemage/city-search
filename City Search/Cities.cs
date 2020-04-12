@@ -5,7 +5,7 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace City_Search
+namespace CitySearch
 {
     class Cities
     {

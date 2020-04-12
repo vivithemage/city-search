@@ -1,4 +1,4 @@
-﻿namespace City_Search
+﻿namespace CitySearch
 {
     class AxaCitySearch
     {
