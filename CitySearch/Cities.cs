@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace CitySearch
 {
-    class Cities
+    public class Cities
     {
         public class City
         {
@@ -58,14 +58,6 @@ namespace CitySearch
             List<City> citiesGroup = JsonConvert.DeserializeObject<List<City>>(jsonSantiized);
 
             return citiesGroup;
-        }
-
-        /*
-         * Pulls latest data set from repository and saves to the data folder.
-         */
-        static void Refresh()
-        {
-
         }
     }
 }
