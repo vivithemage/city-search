@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -36,9 +37,21 @@ namespace CitySearch
          */
         public static List<City> Get()
         {
-            string citiesFilePath = "C:\\Users\\User\\source\\repos\\City Search\\City Search\\data\\cities.json";
+            string json = "";
+            string workingDirectory = System.IO.Path.GetFullPath(@"..\..\..\");
+            string currentDirectory = Directory.GetParent(workingDirectory).Parent.FullName;
 
-            string json = File.ReadAllText(citiesFilePath);
+            try
+            {
+                json = File.ReadAllText(currentDirectory + "\\CitySearch\\data\\cities.json");
+            } 
+            catch (System.IO.FileNotFoundException e)
+            {                
+                Console.WriteLine(e.Message);
+                Console.WriteLine("Exiting application");
+                System.Environment.Exit(0);
+            }
+                       
 
             string jsonSantiized = RemoveDiacritics(json);
 
