@@ -15,13 +15,11 @@ namespace CitySearch
 
             // isEndOfWord is true if the node represents 
             // end of a word 
-            public bool isEndOfWord;
-            public bool visited;
+            public bool isEndOfWord;            
 
             public TrieNode()
             {
-                isEndOfWord = false;
-                visited = false;
+                isEndOfWord = false;                
                 for (int i = 0; i < ALPHABET_SIZE; i++)
                     children[i] = null;
             }
@@ -136,33 +134,25 @@ namespace CitySearch
          * Pass cities by reference so no need to return.
          * Run DFS recursively to build the array
          */
-        private static void DFSPreorder(ref string currentCity, ref ICollection<string> nextCities, TrieNode pCrawl, TrieNode pRoot,string key)
+        private static void DFSPreorder(ref ICollection<string> nextCities, TrieNode pRoot, string currentPrefix)
         {
-            pCrawl.visited = true;
+            if (pRoot.isEndOfWord)
+            {
+                nextCities.Add(currentPrefix);
+                Console.WriteLine(currentPrefix);
+            }
+
+            if (IsLastNode(pRoot)) 
+            {
+                return;
+            }
 
             for (int level = 0; level < ALPHABET_SIZE; level++)
             {
-                if (pCrawl.children[level] != null)
+                if (pRoot.children[level] != null)
                 {
-                    currentCity = currentCity + GetCharacterFromIndex(level);
-
-                    if (pCrawl.children[level].isEndOfWord)
-                    {
-                        //pCrawl.children[level].visited = true;
-                        Console.WriteLine(System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(key) + currentCity);
-
-
-                        // If all next stages are null, clear city
-                        //TODO - this is flawed. It's clearing a current city when there could be others that build on it
-                        if (IsLastNode(pCrawl.children[level]) && pCrawl.children[level].visited != true)
-                        {
-                            currentCity = "";
-                            //DFSPreorder(ref currentCity, ref nextCities, pRoot, pRoot);                            
-                        }
-
-                    }
-
-                    DFSPreorder(ref currentCity, ref nextCities, pCrawl.children[level], pRoot,key);
+                    //currentPrefix = currentPrefix + GetCharacterFromIndex(level);
+                    DFSPreorder(ref nextCities, pRoot.children[level], currentPrefix + GetCharacterFromIndex(level));                    
                 }
             }
         }
@@ -170,22 +160,12 @@ namespace CitySearch
         /* 
          * Returns all next potential cities
          * Use depth-first traversal - Preorder (Root, Left, Right).
-         * 
-         * TODO: Allow for each of the letters in each note to be set as 'visited'
-         * 
-         * Plan.
-         * Create a string
-         * Traverse the tree and as each letter is passed, mark it as visited and append it to the string.
-         * If the node is an end of word node, stop the traverse, log the string as a city and start the traversal again.
-         * All traversals will ignore any visted nodes and by using the preorder method of traversal the city names should be yielded.
-         * After everything has been traversed in the tree, reset all the visited flags to 'not visited' ready for another search.
          */
-        private static ICollection<string> AutocompleteCities(TrieNode pCrawl, int length,string key)
+        private static ICollection<string> AutocompleteCities(TrieNode pCrawl, string key)
         {
             ICollection<string> nextCities = new List<string>();
-            string currentCity = "";
 
-            DFSPreorder(ref currentCity, ref nextCities, pCrawl, pCrawl,key);
+            DFSPreorder(ref nextCities, pCrawl, key);
 
             return nextCities;
         }
@@ -194,7 +174,7 @@ namespace CitySearch
          * Returns next three characters. Requires length to determine
          * which child to start with.
          */
-        private static ICollection<string> AutocompleteCharacters(TrieNode pCrawl, int length)
+        private static ICollection<string> AutocompleteCharacters(TrieNode pCrawl)
         {
             ICollection<string> nextCharacters = new List<string>();
 
@@ -225,21 +205,21 @@ namespace CitySearch
         public ICityResult Search(String key)
         {
             int level;
-            int length = key.Length;
             int index;
+            int length = key.Length;
+            
             TrieNode pCrawl = root;
 
             CityResult result = new CityResult();
 
             for (level = 0; level < length; level++)
             {
-                index = GetIndex(key, level);
-
-                if (pCrawl.children[index] == null)
+                if (pCrawl == null)
                 {
                     return result;
                 }
 
+                index = GetIndex(key, level);
                 pCrawl = pCrawl.children[index];
             }
 
@@ -249,15 +229,26 @@ namespace CitySearch
             if (ExactMatch(pCrawl))
             {
                 result.CityFound = true;
-                return result;
             }
 
             /* 
              * Have not been able to find a city so return the next
              * three characters and cities
              */
-            result.NextLetters = AutocompleteCharacters(pCrawl, length);
-            result.NextCities = AutocompleteCities(pCrawl, length,key);
+            bool isWord = pCrawl.isEndOfWord;
+            bool isLast = IsLastNode(pCrawl);
+
+            if (isWord && isLast)
+            {
+                return result;
+            }
+
+            if (!isLast)
+            {
+                result.NextCities = AutocompleteCities(pCrawl, key);
+            }
+
+            result.NextLetters = AutocompleteCharacters(pCrawl);
 
             return result;
         }
