@@ -40,7 +40,7 @@ namespace CitySearch
             {
                 index = GetIndex(key, level);
                 
-                if ((index > 28) || (index < 0))
+                if ((index > ALPHABET_SIZE) || (index < 0))
                 {
                     return false;
                 }
@@ -121,7 +121,7 @@ namespace CitySearch
 
         private static bool IsLastNode(TrieNode pCrawl)
         {
-            for (int level = 0; level < 28; level++)
+            for (int level = 0; level < ALPHABET_SIZE; level++)
             {
                 if (pCrawl.children[level] != null)
                 {
@@ -140,7 +140,7 @@ namespace CitySearch
         {
             pCrawl.visited = true;
 
-            for (int level = 0; level < 28; level++)
+            for (int level = 0; level < ALPHABET_SIZE; level++)
             {
                 if (pCrawl.children[level] != null)
                 {
@@ -200,7 +200,7 @@ namespace CitySearch
 
             char currentNextCharacter;
 
-            for (int level = 0; level < 28; level++)
+            for (int level = 0; level < ALPHABET_SIZE; level++)
             {
                 if (pCrawl.children[level] != null)
                 {
