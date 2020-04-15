@@ -12,7 +12,7 @@ namespace CitySearch
 
         private string AvailableNextCharactersMessage(ICityResult result)
         {
-            string message = "The following next characters are available: ";
+            string message = "The following next characters are available:";
 
             foreach (string letter in result.NextLetters)
             {
@@ -26,8 +26,16 @@ namespace CitySearch
 
         private string AvailableNextCitiesMessage(ICityResult result)
         {
+            string message = "The following cities are available:";
 
-            return "test";
+            foreach (string city in result.NextCities)
+            {
+                message = $"{message} {city},";
+            }
+
+            message = message.TrimEnd(',');
+
+            return message;
         }
 
         private void displayWelcomeMessage()
@@ -37,14 +45,15 @@ namespace CitySearch
 
         public void ReadLoop(Trie trie)
         {
-            string message;
+            string message = "";
             string searchterm;
             string sanitizedSearchTerm;
 
             displayWelcomeMessage();
 
             while (true)
-            {                
+            {
+                message = "";
                 searchterm = Console.ReadLine(); 
                 sanitizedSearchTerm = SanitizeInput(searchterm);
 
@@ -54,20 +63,23 @@ namespace CitySearch
                 {
                     break;
                 }
-                else if (result.CityFound)                   
-                {
-                    message = sanitizedSearchTerm + " is a city";
-                } 
                 else if (result.NextLetters.Count.Equals(0) && result.NextCities.Count.Equals(0))
                 {
                     message = "Input does not bear resemblance to anything. Unable to suggest next characters or cities";
                 }
                 else
                 {
-                    message = AvailableNextCitiesMessage(result) + "\n" + AvailableNextCharactersMessage(result);                    
+                    if (result.CityFound)
+                    {
+                        message = sanitizedSearchTerm + " is a city\n";
+                    }
+
+                    message = message + AvailableNextCitiesMessage(result) + "\n" + AvailableNextCharactersMessage(result);                    
                 }
 
+                Console.WriteLine(" -- Start of results for '" + searchterm + "' --");
                 Console.WriteLine(message);
+                Console.WriteLine(" -- End of results for '" + searchterm + "' --");
             }
         }
     }

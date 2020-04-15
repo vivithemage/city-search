@@ -138,8 +138,7 @@ namespace CitySearch
         {
             if (pRoot.isEndOfWord)
             {
-                nextCities.Add(currentPrefix);
-                Console.WriteLine(currentPrefix);
+                nextCities.Add(currentPrefix);                
             }
 
             if (IsLastNode(pRoot)) 
@@ -150,8 +149,7 @@ namespace CitySearch
             for (int level = 0; level < ALPHABET_SIZE; level++)
             {
                 if (pRoot.children[level] != null)
-                {
-                    //currentPrefix = currentPrefix + GetCharacterFromIndex(level);
+                {                    
                     DFSPreorder(ref nextCities, pRoot.children[level], currentPrefix + GetCharacterFromIndex(level));                    
                 }
             }
@@ -231,17 +229,19 @@ namespace CitySearch
                 result.CityFound = true;
             }
 
-            /* 
-             * Have not been able to find a city so return the next
-             * three characters and cities
+            /* Indicates the prefix does not match any city and there are no next character suggestions
+             * so just return the empty result 
              */
-            bool isWord = pCrawl.isEndOfWord;
-            bool isLast = IsLastNode(pCrawl);
-
-            if (isWord && isLast)
+            if (pCrawl == null)
             {
                 return result;
             }
+
+            /* 
+             * Have not been able to find a city so return the next
+             * three characters and cities
+             */            
+            bool isLast = IsLastNode(pCrawl);
 
             if (!isLast)
             {
