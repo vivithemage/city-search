@@ -53,7 +53,7 @@ namespace CitySearch.Tests
         public void Main()
         {
             Trie trie = new Trie();
-            trie.Build();
+            trie.Init();
             
             const string sanitizedSearchTerm = "darling";
             

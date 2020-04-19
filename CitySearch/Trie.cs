@@ -8,13 +8,9 @@ namespace CitySearch
         // Alphabet size (26) and increased by two to include spaces and dashes.
         static readonly int ALPHABET_SIZE = 28;
 
-        // trie node 
         class TrieNode
         {
             public TrieNode[] children = new TrieNode[ALPHABET_SIZE];
-
-            // isEndOfWord is true if the node represents 
-            // end of a word 
             public bool isEndOfWord;            
 
             public TrieNode()
@@ -47,9 +43,9 @@ namespace CitySearch
             return true;
         }
 
-        // If not present, inserts key into trie 
-        // If the key is prefix of trie node,  
-        // just marks leaf node 
+       /*
+        * If the key is not present in the trie, insert it.
+        */
         static void Insert(String key)
         {
             int level;
@@ -60,7 +56,10 @@ namespace CitySearch
 
             for (level = 0; level < length; level++)
             {
-                // numerical index of alphabet?
+                /* 
+                 * Letters are stored as numbers in the trie so convert the character
+                 * before entering it into the trie.
+                 */
                 index = GetIndex(key, level);
 
                 if (pCrawl.children[index] == null)
@@ -229,7 +228,8 @@ namespace CitySearch
                 result.CityFound = true;
             }
 
-            /* Indicates the prefix does not match any city and there are no next character suggestions
+            /* 
+             * Indicates the prefix does not match any city and there are no next character suggestions
              * so just return the empty result 
              */
             if (pCrawl == null)
