@@ -43,11 +43,14 @@ namespace CitySearch
             Console.WriteLine("Axa City Search (type exit to quit):");
         }
 
-        public void ReadLoop(Trie trie)
+        public void ReadLoop()
         {
-            string message = "";
+            string message;
             string searchterm;
             string sanitizedSearchTerm;
+
+            Trie trie = new Trie();
+            trie.Init();
 
             displayWelcomeMessage();
 

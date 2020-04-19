@@ -258,7 +258,7 @@ namespace CitySearch
          * Uses the following as the city data source:
          * https://github.com/dr5hn/countries-states-cities-database/blob/master/cities.json
          */
-        public void Build()
+        public void Init()
         {
             List<Cities.City> citiesGroup = Cities.Get();
 
